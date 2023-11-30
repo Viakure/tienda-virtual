@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const ShoppingCartContext = createContext();
 
@@ -18,12 +18,26 @@ export const ShoppingCartProvider = ({ children }) => {
     const [isCheckoutSideMenuOpen, setIsCheckoutSideMenuOpen] = useState(false);
     const openCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(true);
     const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false);
-    
+
     // Product Details - Show Product
     const [productToShow, setProductToShow] = useState({});
 
+    // Gets Products
+    const [items, setItems] = useState(null);
+
+    // Gets Products By Title
+    const [searchByTitle, setSearchByTitle] = useState(null);
+    console.log('Search: ', searchByTitle);
+
+    useEffect(() => {
+        fetch('https://fakestoreapi.com/products?limit=30')
+            .then(response => response.json())
+            .then(data => setItems(data))
+    }, []);
+
+
     return (
-        <ShoppingCartContext.Provider value = {{
+        <ShoppingCartContext.Provider value={{
             count,
             setCount,
             openProductDetail,
@@ -38,8 +52,12 @@ export const ShoppingCartProvider = ({ children }) => {
             openCheckoutSideMenu,
             closeCheckoutSideMenu,
             order,
-            setOrder
-            }}>
+            setOrder,
+            items,
+            setItems,
+            searchByTitle,
+            setSearchByTitle
+        }}>
             {children}
         </ShoppingCartContext.Provider>
     );
