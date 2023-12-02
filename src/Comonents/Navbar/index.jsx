@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { ShoppingBagIcon} from '@heroicons/react/24/solid'
+import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 
 const Navbar = () => {
@@ -17,6 +17,7 @@ const Navbar = () => {
                 </li>
                 <li>
                     <NavLink to='/all'
+                        onClick={() => context.setSearchByCategory()}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
@@ -24,39 +25,44 @@ const Navbar = () => {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/mens-clothing'
+                    <NavLink to='/mensClothing'
+                        onClick={() => context.setSearchByCategory("men")}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
-                        men's clothing
+                        Men's clothing
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/womens-clothin'
+                    <NavLink to='/womensClothing'
+                        onClick={() => context.setSearchByCategory("wo")}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
-                        women's clothing
+                        Women's clothing
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to='/electronics'
+                        onClick={() => context.setSearchByCategory("electronics")}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
-                        electronics
+                        Electronics
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to='/jewelery'
+                        onClick={() => context.setSearchByCategory("jewelery")}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
-                        jewelery
+                        Jewelery
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to='/others'
+                        onClick={() => context.setSearchByCategory("others")}
                         className={({ isActive }) =>
                             isActive ? activeStyle : undefined
                         }>
@@ -93,8 +99,8 @@ const Navbar = () => {
                     </NavLink>
                 </li>
                 <li className="flex items-center">
-                <ShoppingBagIcon className="h-6 w-6 text-black"/> 
-                <div>{context.count}</div>
+                    <ShoppingBagIcon className="h-6 w-6 text-black" />
+                    <div>{context.count}</div>
                 </li>
             </ul>
         </nav>

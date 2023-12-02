@@ -25,9 +25,13 @@ export const ShoppingCartProvider = ({ children }) => {
     // Gets Products
     const [items, setItems] = useState(null);
     const [filteredItems, setFilteredItems] = useState(null);
+    console.log('FilteredItems: ', filteredItems);
 
     // Gets Products By Title
     const [searchByTitle, setSearchByTitle] = useState(null);
+
+    // Gets Products By Category
+    const [searchByCategory, setSearchByCategory] = useState(null);
 
     useEffect(() => {
         fetch('https://fakestoreapi.com/products?limit=30')
@@ -39,9 +43,34 @@ export const ShoppingCartProvider = ({ children }) => {
         return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
     };
 
+    const filteredItemsByCategory = (items, searchByCategory) => {
+        return items?.filter(item => item.category.includes(searchByCategory))
+    };
+
+    const filterBy = (searchType, items, searchByTitle, searchByCategory) =>{
+        if (searchType === 'BY_TITLE') {
+            return filteredItemsByTitle(items, searchByTitle)
+        }
+
+        if (searchType === 'BY_CATEGORY') {
+            return filteredItemsByCategory(items, searchByCategory)
+        }
+
+        if (searchType === 'BY_TITLE_AND_CATEGORY') {
+            return filteredItemsByCategory(items, searchByCategory).filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+        }
+
+        if (!searchType) {
+            return items
+        }
+    }
+
     useEffect(() => {
-        if(searchByTitle) setFilteredItems(filteredItemsByTitle(items, searchByTitle))
-    }, [items, searchByTitle]);
+        if (searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_TITLE_AND_CATEGORY', items, searchByTitle, searchByCategory))
+        if (searchByTitle && !searchByCategory) setFilteredItems(filterBy('BY_TITLE', items, searchByTitle, searchByCategory))
+        if (!searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_CATEGORY', items, searchByTitle, searchByCategory))
+        if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
+    }, [items, searchByTitle, searchByCategory]);
 
     return (
         <ShoppingCartContext.Provider value={{
@@ -64,7 +93,9 @@ export const ShoppingCartProvider = ({ children }) => {
             setItems,
             searchByTitle,
             setSearchByTitle,
-            filteredItems
+            filteredItems,
+            searchByCategory,
+            setSearchByCategory
         }}>
             {children}
         </ShoppingCartContext.Provider>
