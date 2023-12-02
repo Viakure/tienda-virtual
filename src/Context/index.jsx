@@ -25,7 +25,6 @@ export const ShoppingCartProvider = ({ children }) => {
     // Gets Products
     const [items, setItems] = useState(null);
     const [filteredItems, setFilteredItems] = useState(null);
-    console.log('FilteredItems: ', filteredItems);
 
     // Gets Products By Title
     const [searchByTitle, setSearchByTitle] = useState(null);
@@ -34,7 +33,7 @@ export const ShoppingCartProvider = ({ children }) => {
     const [searchByCategory, setSearchByCategory] = useState(null);
 
     useEffect(() => {
-        fetch('https://fakestoreapi.com/products?limit=30')
+        fetch('https://fakestoreapi.com/products?limit=50')
             .then(response => response.json())
             .then(data => setItems(data))
     }, []);
